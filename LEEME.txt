@@ -1,0 +1,38 @@
+-BLOQUE I: Introducción y configuración
+-- Acerca del curso (3min)
+-- ¿Qué es la programación? (5min)
+-- ¿Qué es Processing? (3min)
+-- Descarga e instalación (2min)
+-- Estructura de un sketch (3min)
+-- Configuración del IDE (3min)
+
+-BLOQUE II: Elementos fundamentales
+-- Variables (8min)
+-- Funciones (15min)
+-- Operadores lógicos (7min)
+-- Esctructuras de control (15min)
+-- Bucles (15min)
+-- Arrays (15min)
+
+-BLOQUE III: E/S Ficheros
+-- Lectura de fichero (10min)
+-- Escritura de fichero (10min)
+
+-BLOQUE IV: Interfaz Gráfica Usuario (GUI)
+-- Funciones principales (10min)
+-- Dibujo básico (15min)
+-- Interfaz E/S
+
+-BLOQUE V: Clases
+-- Teoría: Clases (10min)
+-- Aplicación: Clases (15min)
+-- Ejemplo aplicado: clase Jugador (15min)
+
+-BLOQUE VI: Minijuego
+-- Creando un juego: Caza OVNIS (25min)
+
+-BLOQUE VII: Exportando una aplicación
+-- Generando paquete (10min)
+
+-BONUS: Creando un robot
+-- Robot de ratón y teclado (5min)
