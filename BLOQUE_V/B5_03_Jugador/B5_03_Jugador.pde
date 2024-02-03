@@ -50,18 +50,19 @@ class Jugador{
 
 //Objeto de la clase
 Jugador jugador;
-
+PImage bg;
+    
 void setup() {
 
-    size(800, 600);
-
+    size(600, 938);
+    bg = loadImage("background.jpg");
     jugador = new Jugador("NAVE");
-    jugador.setPosicion(400,500);
+    jugador.setPosicion(400,860);
 }
 
 void draw() {
 
-    background(200);
+    background(bg);
     jugador.dibujar();
 
 
