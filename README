@@ -1,3 +1,36 @@
+
+# Aprender a programar desde cero con Processing
+
+## Objetivo
+
+El objetivo de este curso es iniciar en el mundo de la programación a aquellas personas con inquietud y ganas de codificar. Para ello se hace uso del lenguaje de programación Processing, una herramienta sencilla a la vez que potente para comenzar a dar los primeros pasos en el apasionante mundo de la programación. El entorno de compilación es totalmente gratuito y disponible en todas los sistemas operativos.
+
+El curso cubre desde los primeros pasos para la descarga y configuración del entorno, pasando por una explicación de todas las instrucciones básicas de programación, las cuales se utilizarán para realizar un pequeño proyecto basado en un mini juego. 
+
+Cada lección está enfocada a ir evolucionando el código inicial, creciendo y dando forma al proyecto hasta conseguir construir un mini juego, el cual podrá disponer el alumno para su libre instalación y ejecución.
+
+Todo el código empleado en las lecciones está disponible para la descarga y uso libre del alumno, a partir del cual poder crear nuevas funcionalidades o modificaciones.
+
+Con este curso el alumno será capaz de comprender y dominar las instrucciones básicas de programación, forjando con ello una base inicial a partir de la cual poder seguir profundizando en Processing o en cualquier otro lenguaje de programación.
+
+## Processing
+
+Processing es un entorno de desarrrolo de software flexible y un lenguaje para aprender a codificar. Desde 2001, Processing ha promovido la alfabetización en software dentro de las artes visuales y la alfabetización visual dentro de la tecnología. Hay decenas de miles de estudiantes, artistas, diseñadores, investigadores y aficionados que utilizan Processing para aprender y crear prototipos.
+
+![alt text](https://es.m.wikipedia.org/wiki/Archivo:Processing_2021_logo.svg)
+
+## Recursos
+
+Para llevar a cabo la compilación y ejecución del código del repositorio únicamente es necesario el IDE de Processing y las herramientas que incluye:
+
+https://processing.org/download
+
+(la versión de Processing utilizada durante la realización del curso ha sido la 3.5.4, por lo que se recomienda utilizar la misma o posterior)
+
+## Temario
+
+Foobar is a Python library for dealing with word pluralization.
+
 -BLOQUE I: Introducción y configuración
 -- Acerca del curso (3min)
 -- ¿Qué es la programación? (5min)
