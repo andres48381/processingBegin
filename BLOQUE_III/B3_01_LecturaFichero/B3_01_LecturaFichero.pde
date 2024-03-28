@@ -39,7 +39,7 @@ void draw() {
                 vidas = int(valor[1]);
             }
             else if(valor[0].equals("PUNTOS"))
-            {
+            {             
                 puntos = int(valor[1]);
             }
             else if(valor[0].equals("DISPAROS_ESPECIALES"))
