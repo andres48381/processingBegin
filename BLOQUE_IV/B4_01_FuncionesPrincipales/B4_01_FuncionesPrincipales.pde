@@ -1,63 +1,38 @@
-color colorCirculo; //Variable para color del circulo
 
 void setup() {
-    colorCirculo = color(255, 204, 0);  // Define color 'c'
+
     size(600, 900);
 }
 
 void draw() {
 
-    //Fondo
-    background(125,125,200); //RGB
-
-    //Borde NEGRO
-    stroke(0);
-
-    //2d Primitivas
-    //CUADRADO
-    //Relleno VERDE
-    fill(0,255,0);    
-    square(120, 100, 220);
-
-    //CIRCULO
-    //Relleno ROJO
-    fill(colorCirculo);
-    circle(mouseX, mouseY, 100);
-
-    //LINEA
-    //Borde AZUL
-    stroke(0, 0, 255);
-    line(120, 280, 540, 600);
-
-    //TEXTO
-    fill(0);
-    textSize(60);
-    text("MI JUEGO", 140, 620); 
+  //println("draw()!!");
 
 }
 
 
 void mousePressed() {
 
-  //  = mouseX; 
-  //  = mouseY; 
-  colorCirculo = color(0, 255, 0); 
+  println("mousePressed!!");
+
 }
 
 void mouseDragged() {
 
-    //  = mouseX; 
-    //  = mouseY; 
+  println("mouseDragged!!");
+
 }
 
 void mouseReleased() {
-    //  = mouseX; 
-    //  = mouseY; 
-    colorCirculo = color(255, 204, 0);  
+
+  println("mouseReleased!!");
+
 }
 
 void keyPressed()
 {
+    println("keyPressed!!");
+
     if(key == 'A') {
         println(key);
     }
@@ -77,5 +52,6 @@ void keyPressed()
 
 void keyReleased() {
 
-  println("keyReleased!!");
+    println("keyReleased!!");
+    println(key);
 }
