@@ -6,11 +6,15 @@ Jugador[] ovnis;
 PImage fondo;
 int limiteIzquierda, limiteDerecha;
 int limiteArriba, limiteAbajo;
+int contador;
+int cantidadOvnis;
     
 void setup() {
 
     size(600, 938);
     fondo = loadImage("background.jpg");
+
+    contador = cantidadOvnis = 5;
 
     limiteIzquierda = 0;
     limiteDerecha = 520;
@@ -24,9 +28,9 @@ void setup() {
     ovni = new Jugador("OVNI",limiteIzquierda,limiteDerecha,limiteArriba,limiteAbajo,laser,"ovni.png");
     ovni.setPosicion(200, 20);
 
-    ovnis = new Jugador[5];
+    ovnis = new Jugador[cantidadOvnis];
 
-    for(int i=0;i<5;i++)
+    for(int i=0;i<cantidadOvnis;i++)
     {
         ovnis[i] =  new Jugador("OVNI",limiteIzquierda,limiteDerecha,limiteArriba,limiteAbajo,laser,"ovni.png");
         ovnis[i].setPosicion(200+i*40, 50+i*55);
@@ -38,10 +42,38 @@ void draw() {
 
     background(fondo);
 
+    textSize(30);
+    text("OVNIS: "+contador,70,70);
+
     if(nave._vidas > 0)
     {
         nave.dibujar();
         nave.mover();
+
+        //Control de enemigos
+        for(int i=0;i<cantidadOvnis;i++)
+        {
+            if(ovnis[i]._vidas > 0)
+            {
+                ovnis[i].dibujar();
+                ovnis[i].mover();
+
+                boolean enemigoTocado = compruebaDisparos(nave,ovnis[i]);
+
+                if(enemigoTocado == true)
+                {
+                    ovnis[i]._vidas = 0;
+                    contador--;
+                }
+
+                boolean naveTocada = compruebaColision(nave,ovnis[i]);
+
+                if(naveTocada == true)
+                {
+                    nave._vidas = 0;
+                }
+            }  
+        }
     }
     else
     {
@@ -49,30 +81,7 @@ void draw() {
         text("GAME OVER",180,500);
     }
 
-    //Control de enemigos
-    for(int i=0;i<5;i++)
-    {
-        if(ovnis[i]._vidas > 0)
-        {
-            ovnis[i].dibujar();
-            ovnis[i].mover();
 
-            boolean enemigoTocado = compruebaDisparos(nave,ovnis[i]);
-
-            if(enemigoTocado == true)
-            {
-                ovnis[i]._vidas = 0;
-            }
-
-            boolean naveTocada = compruebaColision(nave,ovnis[i]);
-
-            if(naveTocada == true)
-            {
-                nave._vidas = 0;
-            }
-
-        }  
-    }
     
     /*
     if(ovni._vidas > 0)
@@ -96,7 +105,7 @@ boolean compruebaDisparos(Jugador jugador, Jugador enemigo)
     //Comprueba disparo
     if(jugador._disparando == true)
     {
-        if(abs(jugador._x - enemigo._x)<10)
+        if((abs(jugador._x - enemigo._x)<10) && (jugador._y > enemigo._y))
         {
            colision = true;
         }
@@ -134,6 +143,18 @@ void keyPressed()
         else if (keyCode == DOWN) {
             nave.velocidad(0,1);
         } 
+    }
+    else if(key == 'R')
+    {
+        for(int i=0;i<cantidadOvnis;i++)
+        {
+            ovnis[i]._vidas = 1;
+            ovnis[i].setPosicion(200+i*40, 50+i*55);
+        }
+
+        nave._vidas = 1;
+        nave.setPosicion(400,860);
+        contador = cantidadOvnis;
     }    
 }
 void mousePressed() {
