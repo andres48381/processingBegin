@@ -30,16 +30,26 @@ void setup() {
     {
         ovnis[i] =  new Jugador("OVNI",limiteIzquierda,limiteDerecha,limiteArriba,limiteAbajo,laser,"ovni.png");
         ovnis[i].setPosicion(200+i*40, 50+i*55);
-        ovnis[i].velocidad(1,0);
+        ovnis[i].velocidad(i%2==0 ? -1 : 1,1);
     } 
 }
 
 void draw() {
 
     background(fondo);
-    nave.dibujar();
-    nave.mover();
 
+    if(nave._vidas > 0)
+    {
+        nave.dibujar();
+        nave.mover();
+    }
+    else
+    {
+        textSize(50);
+        text("GAME OVER",180,500);
+    }
+
+    //Control de enemigos
     for(int i=0;i<5;i++)
     {
         if(ovnis[i]._vidas > 0)
@@ -47,12 +57,20 @@ void draw() {
             ovnis[i].dibujar();
             ovnis[i].mover();
 
-            boolean tocado = compruebaDisparos(nave,ovnis[i]);
+            boolean enemigoTocado = compruebaDisparos(nave,ovnis[i]);
 
-            if(tocado == true)
+            if(enemigoTocado == true)
             {
                 ovnis[i]._vidas = 0;
             }
+
+            boolean naveTocada = compruebaColision(nave,ovnis[i]);
+
+            if(naveTocada == true)
+            {
+                nave._vidas = 0;
+            }
+
         }  
     }
     
@@ -87,6 +105,20 @@ boolean compruebaDisparos(Jugador jugador, Jugador enemigo)
     return colision;    
 }
 
+boolean compruebaColision(Jugador jugador, Jugador enemigo)
+{
+    boolean colision = false;
+
+    //Comprueba colision
+    if((abs(jugador._x - enemigo._x)<20) && (abs(jugador._y - enemigo._y)<20))
+    {
+        colision = true;    
+    }   
+
+    return colision;    
+}
+
+
 void keyPressed()
 {
     if (key == CODED) {
@@ -112,10 +144,7 @@ void mousePressed() {
 void mouseReleased() {
 
     nave.disparar(false);
+    nave.resetTimeLaser();
    
 }
 
-void keyReleased() {
-
-
-}

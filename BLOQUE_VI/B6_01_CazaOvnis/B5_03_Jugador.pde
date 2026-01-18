@@ -21,6 +21,7 @@ class Jugador{
     //Disparo
     boolean _disparando;
     SoundFile _laserSound;
+    int _timeLaser;
     //Imagen
     PImage _imagen;
     int _vidas;
@@ -39,6 +40,7 @@ class Jugador{
 
         _disparando = false;
         _laserSound = laserSound;
+        _timeLaser = 0;
         _vidas = 1;
 
     }
@@ -79,6 +81,11 @@ class Jugador{
       }
     }
 
+    void resetTimeLaser()
+     {
+      _timeLaser = 0;
+    }
+
     void velocidad(int x_, int y_)
     {
       _vX =x_;
@@ -87,28 +94,34 @@ class Jugador{
 
     void dibujar()
     {
-       if(_vidas > 0)
-       {
-          image(_imagen, _x, _y);
+        image(_imagen, _x, _y);
 
-          if(_disparando)
-          {
-              //LINEA
-              //Borde AZUL
-              strokeWeight(6);
-              stroke(255, 0, 0);
-              line(_x+32, _y, _x+32, 0);
-          }
-       }
+        if(_disparando)
+        {
+            //laser rojo
+            strokeWeight(6);
+            stroke(255, 0, 0);
+            line(_x+32, _y, _x+32, 0);
+
+            _timeLaser++;
+
+            if(_timeLaser > 10)
+            {
+                _disparando = false;
+            }
+        }
     } 
 
     void disparar(boolean disparando)
     { 
         _disparando = disparando;
 
-        if(_disparando && !_laserSound.isPlaying())
+        if(_disparando)
         {
-            _laserSound.play();
+            if(!_laserSound.isPlaying())
+            {
+                _laserSound.play();
+            }
         }
         else{
             _laserSound.stop();
