@@ -1,64 +1,121 @@
 import processing.sound.*;
 
 //Objeto de la clase
-Jugador nave;
-PImage bg;
-PImage ovni;
-int limiteIzq, limiteDer;
+Jugador nave, ovni;
+Jugador[] ovnis;
+PImage fondo;
+int limiteIzquierda, limiteDerecha;
+int limiteArriba, limiteAbajo;
     
 void setup() {
 
     size(600, 938);
-    bg = loadImage("background.jpg");
+    fondo = loadImage("background.jpg");
 
-    limiteIzq = 0;
-    limiteDer = 520;
+    limiteIzquierda = 0;
+    limiteDerecha = 520;
+    limiteArriba = 0;
+    limiteAbajo = 900;
 
     SoundFile laser = new SoundFile(this, "laser.wav");
-    nave = new Jugador("NAVE",limiteIzq,limiteDer,0,900,laser);
+    nave = new Jugador("NAVE",limiteIzquierda,limiteDerecha,limiteArriba,limiteAbajo,laser,"nave.png");
     nave.setPosicion(400,860);
 
-    ovni = loadImage("ovni.png");
-    ovni.resize(100, 100);
+    ovni = new Jugador("OVNI",limiteIzquierda,limiteDerecha,limiteArriba,limiteAbajo,laser,"ovni.png");
+    ovni.setPosicion(200, 20);
 
+    ovnis = new Jugador[5];
+
+    for(int i=0;i<5;i++)
+    {
+        ovnis[i] =  new Jugador("OVNI",limiteIzquierda,limiteDerecha,limiteArriba,limiteAbajo,laser,"ovni.png");
+        ovnis[i].setPosicion(200+i*40, 50+i*55);
+        ovnis[i].velocidad(1,0);
+    } 
 }
 
 void draw() {
 
-    background(bg);
+    background(fondo);
     nave.dibujar();
+    nave.mover();
 
-    image(ovni, 200, 20);
+    for(int i=0;i<5;i++)
+    {
+        if(ovnis[i]._vidas > 0)
+        {
+            ovnis[i].dibujar();
+            ovnis[i].mover();
+
+            boolean tocado = compruebaDisparos(nave,ovnis[i]);
+
+            if(tocado == true)
+            {
+                ovnis[i]._vidas = 0;
+            }
+        }  
+    }
+    
+    /*
+    if(ovni._vidas > 0)
+    {
+        ovni.dibujar();
+        ovni.mover();
+
+        boolean tocado = compruebaDisparos(nave,ovni);
+
+        if(tocado == true)
+        {
+            ovni._vidas = 0;
+        }
+    }*/
+}
+
+boolean compruebaDisparos(Jugador jugador, Jugador enemigo)
+{
+    boolean colision = false;
+
+    //Comprueba disparo
+    if(jugador._disparando == true)
+    {
+        if(abs(jugador._x - enemigo._x)<10)
+        {
+           colision = true;
+        }
+    }   
+
+    return colision;    
 }
 
 void keyPressed()
 {
     if (key == CODED) {
         if (keyCode == LEFT) {
-            nave.mover(-1,0);
+            nave.velocidad(-1,0);
         } 
         else if (keyCode == RIGHT) {
-            nave.mover(1,0);
+            nave.velocidad(1,0);
         } 
         else if (keyCode == UP) {
-            nave.mover(0,-1);
+            nave.velocidad(0,-1);
         } 
         else if (keyCode == DOWN) {
-            nave.mover(0,1);
+            nave.velocidad(0,1);
         } 
-    }
+    }    
+}
+void mousePressed() {
 
-    if(key == '0')
-    {
-        nave.disparar(true);
-    }
-    
+    nave.disparar(true);
+   
+}
+void mouseReleased() {
+
+    nave.disparar(false);
+   
 }
 
 void keyReleased() {
 
-    if(key == '0')
-    {
-        nave.disparar(false);
-    }
+
 }

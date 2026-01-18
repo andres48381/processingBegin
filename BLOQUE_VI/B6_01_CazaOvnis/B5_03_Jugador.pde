@@ -2,107 +2,116 @@
 
 class Jugador{
 
-    String nombre;
-    int velocidad;
+    String _nombre;
+    int _rapidez;
     //Dimensiones
-    int alto;
-    int ancho;
+    int _alto;
+    int _ancho;
     //Posicion
-    float x;
-    float y;
+    float _x;
+    float _y;
+    //Velocidad
+    int _vX;
+    int _vY;
     //Limites del recinto
-    int limIzq;
-    int limDer;
-    int limArr;
-    int limAbaj;
+    int _limiteIzquierda;
+    int _limiteDerecha;
+    int _limiteArriba;
+    int _limiteAbajo;
     //Disparo
-    boolean disparando;
-    SoundFile laserSound;
+    boolean _disparando;
+    SoundFile _laserSound;
     //Imagen
-    PImage img;
+    PImage _imagen;
+    int _vidas;
 
-    Jugador(String n,int limI, int limD, int limAr, int limAb, SoundFile laser)
+    Jugador(String nombre,int limiteIzquierda, int limiteDerecha, int limiteArriba, int limiteAbajo, SoundFile laserSound, String imagen)
     {
-        nombre = n;
-        velocidad = 10;
-        alto = 50;
-        ancho = 70;
-        img = loadImage("nave.png");
-        limIzq = limI;
-        limDer = limD;
-        limArr = limAr;
-        limAbaj = limAb;
+        _nombre = nombre;
+        _rapidez = 5;
+        _alto = 50;
+        _ancho = 70;
+        _imagen = loadImage(imagen);
+        _limiteIzquierda = limiteIzquierda;
+        _limiteDerecha = limiteDerecha;
+        _limiteArriba = limiteArriba;
+        _limiteAbajo = limiteAbajo;
 
-        disparando = false;
-        laserSound = laser;
+        _disparando = false;
+        _laserSound = laserSound;
+        _vidas = 1;
 
     }
 
-    void setPosicion(float _x, float _y)
+    void setPosicion(float x, float y)
     {
-        x = _x;
-        y = _y;
+        _x = x;
+        _y = y;
     }
 
     float getX()
     {
-        return x;
+        return _x;
+    }
+    
+    void mover()
+    {
+      //Ecuacion movimiento
+      _x = _x + _vX*_rapidez;
+      _y = _y + _vY*_rapidez;
+    
+      if(_x < _limiteIzquierda)
+      {
+          _vX = -_vX;
+      }
+      else if(_x > _limiteDerecha)
+      {
+           _vX = -_vX;
+      }
+      
+      if(_y < _limiteArriba)
+      {
+          _vY = -_vY;
+      }
+      else if(_y > _limiteAbajo)
+      {
+          _vY = -_vY;
+      }
     }
 
-    void mover(int x_, int y_)
+    void velocidad(int x_, int y_)
     {
-        //Ecuacion movimiento
-        x = x + x_*velocidad;
-        y = y + y_*velocidad;
-
-        if(x < limIzq)
-        {
-            x = limIzq;
-        }
-        else if(x > limDer)
-        {
-            x = limDer;
-        }
-        
-        if(y < limArr)
-        {
-            y = limArr;
-        }
-        else if(y > limAbaj)
-        {
-            y = limAbaj;
-        }
+      _vX =x_;
+      _vY =y_;
     }
 
     void dibujar()
     {
-        //rectMode(CENTER);  // Set rectMode to CORNERS
-        //fill(100);  // Set fill to gray
-        //rect(x, y, alto, ancho);  // Draw gray rect using CORNERS mode
+       if(_vidas > 0)
+       {
+          image(_imagen, _x, _y);
 
-        image(img, x, y);
-
-        if(disparando)
-        {
-            //LINEA
-            //Borde AZUL
-            strokeWeight(6);
-            stroke(255, 0, 0);
-            line(x+32, y, x+32, 0);
-        }
+          if(_disparando)
+          {
+              //LINEA
+              //Borde AZUL
+              strokeWeight(6);
+              stroke(255, 0, 0);
+              line(_x+32, _y, _x+32, 0);
+          }
+       }
     } 
 
-    void disparar(boolean disparo)
+    void disparar(boolean disparando)
     { 
-        disparando = disparo;
+        _disparando = disparando;
 
-        if(disparando && !laserSound.isPlaying())
+        if(_disparando && !_laserSound.isPlaying())
         {
-            laserSound.play();
+            _laserSound.play();
         }
         else{
-            laserSound.stop();
+            _laserSound.stop();
         }
     }
 }
-
