@@ -1,82 +1,132 @@
 import processing.sound.*;
 
-//Objeto de la clase
-Jugador nave, ovni;
-Jugador[] ovnis;
-PImage fondo;
+Jugador nave; //Nave protagonista
+Jugador ovni; //Ovni solitario
+Jugador[] ovnis; //VECTOR de ovnis
+
+PImage fondo; //Fondo de pantalla
+
+//Limites de la zona de juego
 int limiteIzquierda, limiteDerecha;
 int limiteArriba, limiteAbajo;
-int contador;
-int cantidadOvnis;
+
+int contador; //Cantidad de ovnis que quedan
+int cantidadOvnis; //Cantidad de ovnis inicial
     
+/**
+* @brief Funcion inicial del programa
+*/
 void setup() {
 
+    //Tamaño ventana
     size(600, 938);
+
+    //Imagen de fondo de ventana
     fondo = loadImage("background.jpg");
 
     contador = cantidadOvnis = 5;
 
+    //Coordendas del recinto
     limiteIzquierda = 0;
-    limiteDerecha = 520;
+    limiteDerecha = 550; //550
     limiteArriba = 0;
-    limiteAbajo = 900;
+    limiteAbajo = 900; //900
 
-    SoundFile laser = new SoundFile(this, "laser.wav");
+    //Nave protagonista
+    SoundFile laser = new SoundFile(this, "laser.wav"); //Nuevo sonido de laser
     nave = new Jugador("NAVE",limiteIzquierda,limiteDerecha,limiteArriba,limiteAbajo,laser,"nave.png");
-    nave.setPosicion(400,860);
+    nave.setPosicion(limiteDerecha/2, limiteAbajo - 35); //Posicion inicial de la nave
 
+    //Ovni solitario
     ovni = new Jugador("OVNI",limiteIzquierda,limiteDerecha,limiteArriba,limiteAbajo,laser,"ovni.png");
-    ovni.setPosicion(200, 20);
+    ovni.setPosicion(200, 20); //Posicion inicial del ovni
 
+    //Grupo de ovnis - VECTOR
     ovnis = new Jugador[cantidadOvnis];
 
+    //Bucle para crear cada Ovni en el VECTOR
     for(int i=0;i<cantidadOvnis;i++)
     {
         ovnis[i] =  new Jugador("OVNI",limiteIzquierda,limiteDerecha,limiteArriba,limiteAbajo,laser,"ovni.png");
+
+        //Posicion ovnis. Cada ovni empieza un poco desplazada de su anterior
         ovnis[i].setPosicion(200+i*40, 50+i*55);
-        ovnis[i].velocidad(i%2==0 ? -1 : 1,1);
+
+        //Velocidad ovnis
+        int vX = 1;
+
+        //Si es PAR que empiece hacia la izquierda
+        if(i % 2 == 0)
+        {
+            vX = -1;
+        }
+
+        //Los ovnis empiezan uno hacia izquierda, otro derecha... y todos hacia abajo
+        ovnis[i].setVelocidad(vX, 1);
     } 
 }
 
+/**
+* @brief Funcion principal cíclica de trabajo
+*/
 void draw() {
 
+    //Fondo de pantalla
     background(fondo);
 
+    //Marcador de ovnis en pantalla
     textSize(30);
     text("OVNIS: "+contador,70,70);
-
-    if(nave._vidas > 0)
+    
+    //Si la nave tiene vida hay partida...
+    if(nave.conVidas() == true)
     {
+        //Dibjar y mover la nave
         nave.dibujar();
         nave.mover();
 
         //Control de enemigos
-        for(int i=0;i<cantidadOvnis;i++)
+        for(int i=0; i<cantidadOvnis; i++)
         {
-            if(ovnis[i]._vidas > 0)
+            //Por cada ovni con vida del VECTOR..
+            if(ovnis[i].conVidas() == true)
             {
+                //Dibujar y mover cada ovni del VECTOR
                 ovnis[i].dibujar();
                 ovnis[i].mover();
 
+                //Comprobar si el disparo de la nave acierta en un ovni del VECTOR
                 boolean enemigoTocado = compruebaDisparos(nave,ovnis[i]);
 
+                //Si hay colision le restamos vida al ovni
                 if(enemigoTocado == true)
                 {
-                    ovnis[i]._vidas = 0;
+                    ovnis[i].restaVidas();
+                    //Reducimos una unidad el contador de ovnis vivos
                     contador--;
                 }
 
+                //Comprobar si un ovni pasa por encima de la nave
                 boolean naveTocada = compruebaColision(nave,ovnis[i]);
 
+                //Si hay colision le restamos vida a la nave
                 if(naveTocada == true)
                 {
-                    nave._vidas = 0;
+                    nave.restaVidas();
                 }
             }  
+        }
+
+        //Si todos los ovnis se han eliminado se muestra mensaje de ganar
+        if(contador == 0)
+        {
+            textSize(50);
+            text("¡GANASTE!",180,500);  
         }
     }
     else
     {
+        //...si no fin de la partida 
         textSize(50);
         text("GAME OVER",180,500);
     }
@@ -98,6 +148,12 @@ void draw() {
     }*/
 }
 
+/**
+* @brief Comrpueba la colision entre el laser del jugador y el ovni enemigo
+* @param jugador Nave protagonista
+* @param jugador Ovni enemigo
+* @return verdadero si hay colision entre laser y enemigo
+*/
 boolean compruebaDisparos(Jugador jugador, Jugador enemigo)
 {
     boolean colision = false;
@@ -114,6 +170,12 @@ boolean compruebaDisparos(Jugador jugador, Jugador enemigo)
     return colision;    
 }
 
+/**
+* @brief Comrpueba la colision entre el jugador y el ovni enemigo
+* @param jugador Nave protagonista
+* @param jugador Ovni enemigo
+* @return verdadero si hay colision entre enemigo y jugador
+*/
 boolean compruebaColision(Jugador jugador, Jugador enemigo)
 {
     boolean colision = false;
@@ -127,45 +189,61 @@ boolean compruebaColision(Jugador jugador, Jugador enemigo)
     return colision;    
 }
 
-
+/**
+* @brief Funcion que se llama cada vez que se pulsa una tecla
+*/
 void keyPressed()
 {
+    //Flechas de movimiento de la nave
     if (key == CODED) {
         if (keyCode == LEFT) {
-            nave.velocidad(-1,0);
+            nave.setVelocidad(-1,0);
         } 
         else if (keyCode == RIGHT) {
-            nave.velocidad(1,0);
+            nave.setVelocidad(1,0);
         } 
         else if (keyCode == UP) {
-            nave.velocidad(0,-1);
+            nave.setVelocidad(0,-1);
         } 
         else if (keyCode == DOWN) {
-            nave.velocidad(0,1);
+            nave.setVelocidad(0,1);
         } 
     }
+    //Reinicio de la partida
     else if(key == 'R')
     {
+        //Resucita y reposiciona los ovnis del VECTOR
         for(int i=0;i<cantidadOvnis;i++)
         {
-            ovnis[i]._vidas = 1;
+            ovnis[i].resucita();
             ovnis[i].setPosicion(200+i*40, 50+i*55);
         }
 
-        nave._vidas = 1;
+        //Resucita y reposiciona la nave protagonista
+        nave.resucita();
         nave.setPosicion(400,860);
+
+        //Reinicia el marcador de ovnis
         contador = cantidadOvnis;
     }    
 }
+
+/**
+* @brief Funcion que se llama cada vez que se click el raton
+*/
 void mousePressed() {
 
-    nave.disparar(true);
-   
+    //Activa el laser de la nave
+    nave.disparar(true);   
 }
+
+/**
+* @brief Funcion que se llama cada vez que se suelta el click del raton
+*/
 void mouseReleased() {
 
+    //Rearma el laser de la nave
     nave.disparar(false);
-    nave.resetTimeLaser();
-   
+    nave.resetTimeLaser();   
 }
 
